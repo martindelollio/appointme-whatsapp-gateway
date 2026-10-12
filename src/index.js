@@ -49,10 +49,11 @@ app.post('/api/messages', async (req, res) => {
     const messageId = await sendWhatsApp(to, message);
 
     return res.status(200).json({
-      status: 'sent',
-      eventId,
-      messageId
-    });
+  success: true,
+  message: 'Mensaje enviado',
+  eventId,
+  messageId
+});
   } catch (error) {
     console.error('Error de envío:', error.message);
 
