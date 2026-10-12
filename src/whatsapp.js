@@ -1,3 +1,4 @@
+
 import makeWASocket, {
   useMultiFileAuthState,
   DisconnectReason
@@ -29,7 +30,6 @@ export async function connectWhatsApp() {
   client.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect } = update;
 
-    // Esperar a que el WebSocket esté disponible.
     if (
       !state.creds.registered &&
       !pairingRequested &&
@@ -50,7 +50,10 @@ export async function connectWhatsApp() {
 
         console.log('Código de vinculación:', code);
       } catch (error) {
-        console.error('Error al solicitar código:', error.message);
+        console.error(
+          'Error al solicitar código:',
+          error.message
+        );
       }
     }
 
@@ -67,7 +70,11 @@ export async function connectWhatsApp() {
 
       console.log('WhatsApp desconectado:', code);
 
-      if (code !== DisconnectReason.loggedOut && !reconnectTimer) {
+      if (
+        code !== DisconnectReason.loggedOut &&
+        code !== DisconnectReason.connectionReplaced &&
+        !reconnectTimer
+      ) {
         reconnectTimer = setTimeout(() => {
           reconnectTimer = null;
           connectWhatsApp().catch(console.error);
